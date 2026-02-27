@@ -1,0 +1,90 @@
+{% assign product_handle = section.settings.product %}
+{% assign product = all_products[product_handle] %}
+
+<h3>{{product.title}}</h3>
+{% assign list_products = product.metafields.custom.sliders.value %}
+
+{% if list_products %}
+
+    <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+    <!-- Slider main container -->
+    <div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slides -->
+        {% for product_with_banner in list_products %}
+            {% assign banner = product_with_banner.banner %}
+            {% assign product_b_handle = product_with_banner.produto_relacionado %}
+            {% assign product_b = all_products[product_b_handle] %}
+            <div class="swiper-slide">
+                <a href="{{product_b.url}}">
+                    <img src="{{ banner | image_url: width: 300 }}" width="300px" height="auto">
+                    <h2>{{product_b.title}}</h2>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+    </div>
+
+    <style>
+        .swiper {
+            width: 600px;
+            height: 800px;
+        }
+        .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+    </style>
+
+    <script>
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+
+            // If we need pagination
+            pagination: {
+            el: '.swiper-pagination',
+            },
+
+            // Navigation arrows
+            navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+            },
+
+            // And if we need scrollbar
+            scrollbar: {
+            el: '.swiper-scrollbar',
+            },
+        });
+    </script>
+
+{% endif %}
+{% schema %}
+    {
+        "name": "challenge Resolvido",
+        "settings": [{
+            "type": "product",
+            "id": "product",
+            "label": "Product"
+        }]
+    }
+{% endschema %}
